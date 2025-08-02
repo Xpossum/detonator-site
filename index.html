@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>XRP Possum Detonator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Changa+One&display=swap" rel="stylesheet">
+  <style>
+    body { margin:0; font-family:'Changa One'; background:#1a1a1a; color:#fce3b4; }
+    .widget { max-width:500px; margin:40px auto; padding:30px; text-align:center; border:2px solid #fce3b4; border-radius:12px; box-shadow:0 0 15px #e63946; }
+    h1 { font-size:2.5rem; margin:0 0 10px; }
+    .subtitle { font-size:2.6rem; color:#ffcc00; margin-bottom:20px; }
+    .bar { border:3px solid #e63946; border-radius:40px; height:50px; overflow:hidden; margin:20px 0; }
+    .progress { background:#e63946; height:100%; width:29%; text-align:right; padding-right:12px; color:#fff; font-size:2.4rem; line-height:50px; border-top-left-radius:40px; border-bottom-left-radius:40px; }
+    .info { font-size:2rem; margin:10px 0; }
+    .warning { font-size:2.6rem; color:#ffcc00; margin:15px 0; }
+    .btn { background:#e63946; color:#0e0101; font-size:2.2rem; padding:15px 30px; border:none; border-radius:10px; cursor:pointer; transition:0.3s; }
+    .btn:hover { background:#28a745; }
+    @media(max-width:480px){ h1{font-size:2rem;} .subtitle{font-size:1.3rem;} .progress{font-size:1.1rem;padding-right:8px;} .warning{font-size:1.4rem;} }
+  </style>
+</head>
+<body>
+  <div class="widget">
+    <h1>GƎNᄅ POSSUM DETONATOR</h1>
+    <div class="subtitle">DETONATOR ARMED</div>
+    <div class="bar"><div class="progress"></div></div>
+    <div class="info" id="countdown">Loading…</div>
+    <div class="warning">&#x26a0;&#xfe0f; 50 POSSUMS AT RISK!</div>
+    <button class="btn" onclick="explodeAndRedirect(this)">RESET THE DETONATOR</button>
+  </div>
+
+  <script>
+    function explodeAndRedirect(btn) {
+      btn.classList.add('explode');
+      setTimeout(()=>location.href='https://xrp.cafe/collection/awesomepossum',900);
+    }
+    async function fetchMint() {
+      const res = await fetch('https://possum-listener.onrender.com/mint.json'); 
+      const { lastMint } = await res.json();
+      return new Date(lastMint);
+    }
+    function startTimer(last) {
+      setInterval(()=>{
+        const diff=Date.now()-last;
+        const secs=Math.floor(diff/1000)%60, mins=Math.floor(diff/60000)%60,
+              hrs=Math.floor(diff/3600000)%24, days=Math.floor(diff/86400000);
+        document.getElementById('countdown')
+          .textContent=`${days}d ${hrs}h ${mins}m ${secs}s since last mint`;
+        const pct=Math.min(100,(diff/604800000)*100).toFixed(0);
+        document.querySelector('.progress').style.width=pct+'%';
+        document.querySelector('.progress').textContent=pct+'%';
+      },1000);
+    }
+    fetchMint().then(startTimer).catch(e=>console.error(e));
+  </script>
+</body>
+</html>
