@@ -34,7 +34,7 @@
       setTimeout(()=>location.href='https://xrp.cafe/collection/awesomepossum',900);
     }
     async function fetchMint() {
-      const res = await fetch('https://possum-listener.onrender.com/mint.json'); 
+      const res = await fetch('https://possum-listener-9ick.onrender.com/mint.json'); 
       const { lastMint } = await res.json();
       return new Date(lastMint);
     }
@@ -53,4 +53,5 @@
     fetchMint().then(startTimer).catch(e=>console.error(e));
   </script>
 </body>
+
 </html>
